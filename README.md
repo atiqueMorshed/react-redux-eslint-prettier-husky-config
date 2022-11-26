@@ -1,46 +1,137 @@
-# Getting Started with Create React App
+# Lint Configuration Guide
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 1. ESLint initialization: [eslint.org]("https://www.eslint.org/")
 
-## Available Scripts
+    npm init @eslint/config
 
-In the project directory, you can run:
+Go through the basic setup.
 
-### `npm start`
+## 2. Configuring `.eslintrc.json`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- To initialize jest in eslint, add `"jest": true` under the `env` object in `.eslintrc.json`. An example is given below:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```json
+{
+"env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true    <---
+}
+```
 
-### `npm test`
+- Also, include `"project": "./tsconfig.json"` under `"parserOptions"` to ensure proper typescript transpiling.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```json
+{
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"  <---
+  },
+```
 
-### `npm run build`
+- Finally, specify the target react version
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```json
+"settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 3. Enable eslint linting in `package.json`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```json
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint .",             <---
+    "lint:fix": "eslint --fix ."    <---
+  },
+```
 
-### `npm run eject`
+Here, the `.` refers to the `.eslintrc.json` file in the root directory.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This enables us to run lint scripts
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    npm run lint
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+To fix the issues
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    npm run lint:fix
 
-## Learn More
+Here are some of my custom rules
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```json
+  "rules": {
+    "indent": ["error", "tab"],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"]
+  },
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 4. Prettier integration with eslint
+
+Install required packages:
+
+    npm i prettier eslint-config-prettier eslint-plugin-prettier --save-dev
+
+Adding prettier to `.eslintrc.json`
+
+```json
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:prettier/recommended"        <---
+	],
+```
+
+Also, add prettier to the last of the plugins list to give it highest priority
+
+```json
+"plugins": ["react", "@typescript-eslint", "prettier"],
+```
+
+Now, create `.prettierrc` file in the root directory of your project and add the following
+
+```json
+{
+	"tabWidth": 2,
+	"useTabs": true,
+	"semi": true,
+	"singleQuote": false,
+	"trailingComma": "all",
+	"printWidth": 80,
+	"bracketSpacing": true
+}
+```
+
+Install `Prettier` in `VSCode extensions`. To apply the prettier rules on save, go to `settings` and enable the following:
+
+    Default Formatter: Prettier
+    Format on Save: Ticked
+
+## 5. Visualizing eslint configuration
+
+- Download and install the `Lintel` extension for vscode.
+
+- Now, just hit `Ctrl + Shift + P` and run `Lintel` to view Lintel for current project.
+
+## 6. Husky - enable pre-commit [typicode.github.io/husky]("https://typicode.github.io/husky")
+
+Installation
+
+    npx husky-init && npm install
+
+This will create `.husky` on the root and in there, the `pre-commit` file will have all the pre-commit commands that will be executed before git commit. We can manually add/edit the pre-commit commands in that file.
+
+Alternatively, we can use the `npx husky add .husky/pre-commit "CUSTOM_COMMAND"` to `add` commands OR `npx husky set .husky/pre-commit "CUSTOM_COMMAND"` to `set` through the `terminal`. `add` will append commands to already available commands whereas `set` will discard previous commands and only include the new commands.
+
+For our case, we will `set` the linting command
+
+    npx husky set .husky/pre-commit "npm run lint"
