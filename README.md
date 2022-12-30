@@ -111,10 +111,13 @@ Now, create `.prettierrc` file in the root directory of your project and add the
 }
 ```
 
+
 Install `Prettier` in `VSCode extensions`. To apply the prettier rules on save, go to `settings` and enable the following:
 
     Default Formatter: Prettier
     Format on Save: Ticked
+
+
 
 ## 5. Visualizing eslint configuration
 
@@ -135,3 +138,7 @@ Alternatively, we can use the `npx husky add .husky/pre-commit "CUSTOM_COMMAND"`
 For our case, we will `set` the linting command
 
     npx husky set .husky/pre-commit "npm run lint"
+
+
+## 7. Tailwind Fix
+If you are using tailwind, you'll get an error related to `tailwind.config.js`. To fix this, create a file `.eslintignore` and add `tailwind.config.js` to ignore list.
