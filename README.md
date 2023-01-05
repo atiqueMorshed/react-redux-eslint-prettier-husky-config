@@ -143,3 +143,13 @@ For our case, we will `set` the linting command
 
 ## 7. Tailwind Fix
 If you are using tailwind, you'll get an error related to `tailwind.config.js`. To fix this, create a file `.eslintignore` and add `tailwind.config.js` to ignore list.
+
+## 08. Typescript Type Declarations for images, css files, ...
+Create a `custom.d.ts` file in the `/src` directory and add all the required type declarations. Here is an example:
+
+```
+declare module "*.png";
+declare module "*.svg";
+declare module "*.css";
+
+```
