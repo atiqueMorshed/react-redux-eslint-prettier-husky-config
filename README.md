@@ -81,7 +81,7 @@ Here are some of my custom rules
 
 Install required packages:
 
-    npm i prettier eslint-config-prettier eslint-plugin-prettier --save-dev
+    npm i prettier eslint-config-prettier eslint-plugin-prettier eslint-plugin-react-hooks --save-dev
 
 Adding prettier to `.eslintrc.json`
 
