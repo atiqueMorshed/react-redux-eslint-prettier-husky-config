@@ -55,33 +55,40 @@ Go through the basic setup.
 
 Here, the `.` refers to the `.eslintrc.json` file in the root directory.
 
-This enables us to run lint scripts
+## 4. Install and enable eslint-plugin-react-hooks
 
-    npm run lint
+```
+npm install eslint-plugin-react-hooks --save-dev
+```
 
-To fix the issues
+Now, go to `eslintrc.json` and add `react-hooks` to `plugins`:
 
-    npm run lint:fix
+```json
+"plugins": ["react", "react-hooks", "@typescript-eslint"],
+```
+
+We also need to add some rules in `eslintrc.josn`
 
 Here are some of my custom rules
 
 ```json
-  "rules": {
-    "indent": ["error", "tab"],
-    "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"],
-    "react/react-in-jsx-scope": "off",
-    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks 
+  "rules": {
+    "indent": ["error", "tab"],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
     "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
-  },
+  },
 ```
 
-## 4. Prettier integration with eslint
+
+## 5. Prettier integration with eslint
 
 Install required packages:
 
-    npm i prettier eslint-config-prettier eslint-plugin-prettier eslint-plugin-react-hooks --save-dev
+    npm i prettier eslint-config-prettier eslint-plugin-prettier --save-dev
 
 Adding prettier to `.eslintrc.json`
 
@@ -97,7 +104,7 @@ Adding prettier to `.eslintrc.json`
 Also, add prettier to the last of the plugins list to give it highest priority
 
 ```json
-"plugins": ["react", "@typescript-eslint", "prettier"],
+"plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
 ```
 
 Now, create `.prettierrc` file in the root directory of your project and add the following
@@ -114,21 +121,29 @@ Now, create `.prettierrc` file in the root directory of your project and add the
 }
 ```
 
-
 Install `Prettier` in `VSCode extensions`. To apply the prettier rules on save, go to `settings` and enable the following:
 
     Default Formatter: Prettier
     Format on Save: Ticked
 
 
+Now we can check for errors using the lint script.
 
-## 5. Visualizing eslint configuration
+    npm run lint
+
+To fix the issues
+
+    npm run lint:fix
+
+
+
+## 6. Visualizing eslint configuration
 
 - Download and install the `Lintel` extension for vscode.
 
 - Now, just hit `Ctrl + Shift + P` and run `Lintel` to view Lintel for current project.
 
-## 6. Husky - enable pre-commit [typicode.github.io/husky]("https://typicode.github.io/husky")
+## 7. Husky - enable pre-commit [typicode.github.io/husky]("https://typicode.github.io/husky")
 
 Installation
 
@@ -143,10 +158,10 @@ For our case, we will `set` the linting command
     npx husky set .husky/pre-commit "npm run lint"
 
 
-## 7. Tailwind Fix
+## 8. Tailwind Fix
 If you are using tailwind, you'll get an error related to `tailwind.config.js`. To fix this, create a file `.eslintignore` and add `tailwind.config.js` to ignore list.
 
-## 08. Typescript Type Declarations for images, css files, ...
+## 9. Typescript Type Declarations for images, css files, ...
 Create a `custom.d.ts` file in the `/src` directory and add all the required type declarations. Here is an example:
 
 ```
@@ -155,3 +170,43 @@ declare module "*.svg";
 declare module "*.css";
 
 ```
+
+
+## 10. VSCode ESLint in subdirectory
+By default, it'll throw an error like: <span style="color:#db4f4a">Parsing error: Cannot read file ......./tsconfig.json</span>
+
+Just add this to settings file. Here, Eslint will assume `./client` as root dir.
+```javascript
+"eslint.workingDirectories": [
+    "./client"
+]
+```
+
+
+## 11. Node Express Backend 
+`.eslintrc` file for **express backend**
+```json
+{
+
+    "env": {
+        "node": true,
+        "es2021": true
+    },
+    "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+    "overrides": [],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": ["prettier"],
+    "rules": {
+        "indent": ["error", "tab"],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "double"],
+        "semi": ["error", "always"]
+    }
+}
+```
+
+
+#guides #react #typescript #eslint #prettier #husky #lint
