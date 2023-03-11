@@ -72,7 +72,7 @@ Here are some of my custom rules
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
     "react/react-in-jsx-scope": "off",
-    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks 
     "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
   },
 ```
